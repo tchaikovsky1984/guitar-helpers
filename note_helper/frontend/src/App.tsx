@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
@@ -22,12 +19,13 @@ function App() {
 
   async function startLoop(e) {
     e.preventDefault();
+    let currentNotes = [...notes];
     if (!sharps) {
-      notes = notes.filter((note) => note.length === 1);
+      currentNotes = currentNotes.filter((note) => note.length === 1);
     }
     while (true) {
-      const randomIdx = Math.floor(Math.random() * (notes.length - 1));
-      setNote(notes[randomIdx]);
+      const randomIdx = Math.floor(Math.random() * currentNotes.length);
+      setNote(currentNotes[randomIdx]);
       await new Promise(resolve => setTimeout(resolve, time * 1000));
     }
   }
@@ -37,147 +35,38 @@ function App() {
       <section id='center'>
         <div>
           <h1>Note Helper</h1>
-          <form>
+          <form style={{ display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <label htmlFor="sharps">Include Sharps?:</label>
+              <input
+                id="sharps"
+                type='checkbox'
+                name='sharps'
+                checked={sharps}
+                onChange={handleCheckboxChange}
+              />
+            </div>
 
-            <label>Include Sharps?:</label>
-            <input
-              type='checkbox'
-              name='sharps'
-              checked={sharps}
-              onChange={handleCheckboxChange}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <label htmlFor="time">Time Between Prompts (s):</label>
+              <input
+                id="time"
+                type='number'
+                name='time'
+                value={time}
+                onChange={handleNumberChange}
+              />
+            </div>
 
-            <label>Time Between Prompts:</label>
-            <input
-              type='number'
-              name='time'
-              defaultValue={time}
-              onChange={handleNumberChange}
-            />
-
-            <button
-              onClick={startLoop}
-            >Start</button>
+            <button onClick={startLoop}>Start</button>
           </form>
         </div>
-        <div>
-          <h2>{note}</h2>
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{ fontSize: '4rem' }}>{note}</h2>
         </div>
       </section>
     </>
   );
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-
 }
 
 export default App
